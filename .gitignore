@@ -57,9 +57,43 @@ freeline.py
 freeline/
 freeline_project_description.json
 
-# fastlane
+# Fastlane
 fastlane/report.xml
 fastlane/Preview.html
 fastlane/screenshots
 fastlane/test_output
 fastlane/readme.md
+
+# Android Studio gitignore
+*.iml
+.gradle
+/local.properties
+/.idea/caches
+/.idea/libraries
+/.idea/modules.xml
+/.idea/workspace.xml
+/.idea/navEditor.xml
+/.idea/assetWizardSettings.xml
+.DS_Store
+/build
+/captures
+.externalNativeBuild
+.cxx
+
+# Custom gitignore
+.idea/
+.gradle
+/local.properties
+/out
+/*/build
+/build
+/*/production
+*.iml
+*.iws
+*.ipr
+*~
+*.swp
+.gradle/1.10/taskArtifacts/cache.properties
+.gradle/1.10/taskArtifacts/outputFileStates.bin
+build/intermediates/dex-cache/cache.xml
+gradle.properties
