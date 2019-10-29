@@ -4,6 +4,7 @@
     package="thiagocruz.testingthings">
 
     <application
+        android:name="app.application.BaseApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -13,7 +14,7 @@
         tools:ignore="GoogleAppIndexingWarning">
 
         <activity
-            android:name="app.AppActivity"
+            android:name="app.activity.AppActivity"
             android:label="@string/app_name"
             android:theme="@android:style/Theme.NoDisplay">
             <intent-filter>

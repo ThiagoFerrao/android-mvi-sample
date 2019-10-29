@@ -19,10 +19,7 @@ abstract class RxActivity<Command, Mutation, State, ViewModel> :
         super.onCreate(savedInstanceState)
         if (layoutResource != NO_LAYOUT) setContentView(layoutResource)
 
-        val presenter = factory.presenter()
-        val interactor = factory.interactor()
         input = presenter.adapt(interactor.process(output))
-
         val bindings = createBindings(input)
         disposer.addAll(bindings)
     }

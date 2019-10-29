@@ -1,22 +1,15 @@
 package base
 
-import android.content.Context
-import android.content.Intent
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.PublishSubject
 
-interface RxFactory<Command, Mutation, State, ViewModel> {
-    fun intent(context: Context): Intent
-    fun presenter(): RxPresenting<State, ViewModel>
-    fun interactor(): RxInteracting<Command, Mutation, State>
-}
-
 interface RxViewing<Command, Mutation, State, ViewModel> {
     val layoutResource: Int
 
-    val factory: RxFactory<Command, Mutation, State, ViewModel>
+    val presenter: RxPresenting<State, ViewModel>
+    val interactor: RxInteracting<Command, Mutation, State>
 
     var input: Observable<ViewModel>
     val output: PublishSubject<Command>
