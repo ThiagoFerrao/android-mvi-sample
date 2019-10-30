@@ -11,31 +11,33 @@ import org.junit.Test
 class HomePresenterTest {
 
     private lateinit var presenter: HomePresenter
+
     private lateinit var input: PublishSubject<HomeState>
-    private lateinit var outputTest: TestObserver<HomeViewModel>
+    private lateinit var output: TestObserver<HomeViewModel>
 
     @Before
     fun before() {
         presenter = HomePresenter()
         input = PublishSubject.create()
+        output = TestObserver.create()
     }
 
     @Test
     fun should_not_emit_view_model_if_state_wasnt_emitted() {
-        outputTest = presenter.adapt(input).test()
+        output = presenter.adapt(input).test()
 
-        outputTest.assertNoValues()
+        output.assertNoValues()
     }
 
     @Test
     fun should_emit_correct_view_model_after_state_was_emitted() {
         val buttonTitle = "Clique"
 
-        outputTest = presenter.adapt(input).test()
+        output = presenter.adapt(input).test()
         input.onNext(HomeState(buttonTitle))
 
-        outputTest.assertValueCount(1)
-        outputTest.assertValue(HomeViewModel(buttonTitle))
+        output.assertValueCount(1)
+        output.assertValue(HomeViewModel(buttonTitle))
     }
 
     @Test
@@ -43,21 +45,15 @@ class HomePresenterTest {
         val buttonTitleClick = "Clique"
         val buttonTitleTap = "Toque"
 
-        outputTest = presenter.adapt(input).test()
-        input.onNext(HomeState(buttonTitleTap))
-        input.onNext(HomeState(buttonTitleTap))
-        input.onNext(HomeState(buttonTitleClick))
+        output = presenter.adapt(input).test()
         input.onNext(HomeState(buttonTitleTap))
         input.onNext(HomeState(buttonTitleClick))
         input.onNext(HomeState(buttonTitleTap))
         input.onNext(HomeState(buttonTitleClick))
         input.onNext(HomeState(buttonTitleClick))
 
-        outputTest.assertValueCount(8)
-        outputTest.assertValues(
-            HomeViewModel(buttonTitleTap),
-            HomeViewModel(buttonTitleTap),
-            HomeViewModel(buttonTitleClick),
+        output.assertValueCount(5)
+        output.assertValues(
             HomeViewModel(buttonTitleTap),
             HomeViewModel(buttonTitleClick),
             HomeViewModel(buttonTitleTap),
@@ -69,6 +65,6 @@ class HomePresenterTest {
     @After
     fun after() {
         input.onComplete()
-        outputTest.dispose()
+        output.dispose()
     }
 }
