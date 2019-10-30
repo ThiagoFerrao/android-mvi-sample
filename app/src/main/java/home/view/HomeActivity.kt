@@ -12,7 +12,6 @@ import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.activity_main.*
 import org.koin.android.scope.currentScope
-import org.koin.core.parameter.parametersOf
 import thiagocruz.testingthings.R
 
 class HomeActivity : RxActivity<HomeCommand, HomeMutation, HomeState, HomeViewModel>() {
@@ -20,11 +19,7 @@ class HomeActivity : RxActivity<HomeCommand, HomeMutation, HomeState, HomeViewMo
     override val layoutResource = R.layout.activity_main
 
     override val presenter: RxPresenting<HomeState, HomeViewModel> by currentScope.inject()
-    override val interactor: RxInteracting<HomeCommand, HomeMutation, HomeState> by currentScope.inject {
-        parametersOf(
-            HomeState("Clique")
-        )
-    }
+    override val interactor: RxInteracting<HomeCommand, HomeMutation, HomeState> by currentScope.inject ()
 
     override fun createBindings(input: Observable<HomeViewModel>): ArrayList<Disposable> {
         val bindings = super.createBindings(input)

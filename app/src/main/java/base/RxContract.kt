@@ -11,15 +11,16 @@ interface RxViewing<Command, Mutation, State, ViewModel> {
     val presenter: RxPresenting<State, ViewModel>
     val interactor: RxInteracting<Command, Mutation, State>
 
-    var input: Observable<ViewModel>
+    val input: Observable<ViewModel>
     val output: PublishSubject<Command>
     val disposer: CompositeDisposable
 
+    fun processBinding(): Observable<ViewModel>
     fun createBindings(input: Observable<ViewModel>): ArrayList<Disposable>
     fun render(viewModel: ViewModel)
 
     companion object {
-        val NO_LAYOUT: Int = 0
+        const val NO_LAYOUT: Int = 0
     }
 }
 

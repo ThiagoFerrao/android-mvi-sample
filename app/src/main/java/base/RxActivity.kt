@@ -11,7 +11,7 @@ import io.reactivex.subjects.PublishSubject
 abstract class RxActivity<Command, Mutation, State, ViewModel> :
     RxViewing<Command, Mutation, State, ViewModel>, AppCompatActivity() {
 
-    override lateinit var input: Observable<ViewModel>
+    override val input: Observable<ViewModel> by lazy { processBinding() }
     override val output: PublishSubject<Command> = PublishSubject.create()
     override val disposer: CompositeDisposable = CompositeDisposable()
 
@@ -19,16 +19,15 @@ abstract class RxActivity<Command, Mutation, State, ViewModel> :
         super.onCreate(savedInstanceState)
         if (layoutResource != NO_LAYOUT) setContentView(layoutResource)
 
-        input = presenter.adapt(interactor.process(output))
         val bindings = createBindings(input)
         disposer.addAll(bindings)
     }
 
-    override fun createBindings(input: Observable<ViewModel>): ArrayList<Disposable> {
-        return arrayListOf(
-            input.subscribe { this.render(it) }
-        )
-    }
+    override fun processBinding(): Observable<ViewModel> =
+        presenter.adapt(interactor.process(output))
+
+    override fun createBindings(input: Observable<ViewModel>): ArrayList<Disposable> =
+        arrayListOf( input.subscribe { this.render(it) } )
 
     override fun onDestroy() {
         output.onComplete()

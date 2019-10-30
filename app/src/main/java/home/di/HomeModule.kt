@@ -15,10 +15,7 @@ import org.koin.dsl.module
 val homeModule = module(override = true) {
     scope(named<HomeActivity>()) {
         scoped<RxPresenting<HomeState, HomeViewModel>> { HomePresenter() }
-        scoped<RxInteracting<HomeCommand, HomeMutation, HomeState>> { (initialState: HomeState) ->
-            HomeInteractor(
-                initialState
-            )
-        }
+        scoped {  HomeState("Toque") }
+        scoped<RxInteracting<HomeCommand, HomeMutation, HomeState>> { HomeInteractor(get()) }
     }
 }
