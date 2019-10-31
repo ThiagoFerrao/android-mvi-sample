@@ -96,4 +96,3 @@ fastlane/readme.md
 .gradle/1.10/taskArtifacts/cache.properties
 .gradle/1.10/taskArtifacts/outputFileStates.bin
 build/intermediates/dex-cache/cache.xml
-gradle.properties
