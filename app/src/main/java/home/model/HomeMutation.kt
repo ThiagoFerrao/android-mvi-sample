@@ -1,5 +1,8 @@
 package home.model
 
+import network.QuoteResponse
+
 sealed class HomeMutation {
-    data class BUTTON_TITLE(val title: String) : HomeMutation()
+    object DisableButton : HomeMutation()
+    data class UpdateData(val data: QuoteResponse) : HomeMutation()
 }

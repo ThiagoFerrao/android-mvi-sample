@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import base.RxViewing.Companion.NO_LAYOUT
 import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.PublishSubject
@@ -27,7 +28,11 @@ abstract class RxActivity<Command, Mutation, State, ViewModel> :
         presenter.adapt(interactor.process(output))
 
     override fun createBindings(input: Observable<ViewModel>): ArrayList<Disposable> =
-        arrayListOf( input.subscribe { this.render(it) } )
+        arrayListOf(
+            input
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { this.render(it) }
+        )
 
     override fun onDestroy() {
         output.onComplete()

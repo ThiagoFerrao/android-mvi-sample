@@ -1,3 +1,9 @@
 package home.model
 
-data class HomeState(var buttonTitle: String)
+import network.QuoteResponse
+
+data class HomeState(
+    var data: QuoteResponse?,
+    var buttonText: String,
+    var isButtonEnable: Boolean
+)

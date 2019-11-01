@@ -19,14 +19,14 @@ class HomeActivity : RxActivity<HomeCommand, HomeMutation, HomeState, HomeViewMo
     override val layoutResource = R.layout.activity_main
 
     override val presenter: RxPresenting<HomeState, HomeViewModel> by currentScope.inject()
-    override val interactor: RxInteracting<HomeCommand, HomeMutation, HomeState> by currentScope.inject ()
+    override val interactor: RxInteracting<HomeCommand, HomeMutation, HomeState> by currentScope.inject()
 
     override fun createBindings(input: Observable<HomeViewModel>): ArrayList<Disposable> {
         val bindings = super.createBindings(input)
 
         bindings.add(
-            RxView.clicks(main_button)
-                .map { HomeCommand.BUTTON_TAP }
+            RxView.clicks(mainButton)
+                .map { HomeCommand.ButtonTap }
                 .subscribe { output.onNext(it) }
         )
 
@@ -34,6 +34,8 @@ class HomeActivity : RxActivity<HomeCommand, HomeMutation, HomeState, HomeViewMo
     }
 
     override fun render(viewModel: HomeViewModel) {
-        main_button.text = viewModel.buttonTitle
+        quoteTextView.text = viewModel.quoteText
+        mainButton.text = viewModel.buttonText
+        mainButton.isEnabled = viewModel.isButtonEnable
     }
 }

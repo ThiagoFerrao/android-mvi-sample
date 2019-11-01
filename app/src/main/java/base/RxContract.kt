@@ -36,3 +36,7 @@ interface RxInteracting<Command, Mutation, State> {
     fun mutation(command: Command, currentState: State): Observable<Mutation>
     fun reduce(mutation: Mutation, currentState: State): State
 }
+
+interface RxUseCasing<Parameters, Mutation> {
+    fun execute(parameters: Parameters): Observable<Mutation>
+}
