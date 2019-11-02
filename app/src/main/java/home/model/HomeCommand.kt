@@ -1,5 +1,5 @@
 package home.model
 
-enum class HomeCommand {
-    ButtonTap
+sealed class HomeCommand {
+    data class ButtonTap(val searchValue: String) : HomeCommand()
 }

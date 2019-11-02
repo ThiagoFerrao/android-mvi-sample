@@ -1,9 +1,10 @@
 package home.model
 
-import network.QuoteResponse
+import network.ZomatoRestaurant
 
 data class HomeState(
-    var data: QuoteResponse?,
+    var data: ZomatoRestaurant?,
     var buttonText: String,
-    var isButtonEnable: Boolean
+    var isButtonEnable: Boolean,
+    var errorMessage: String?
 )

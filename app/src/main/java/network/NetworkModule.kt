@@ -24,7 +24,7 @@ val networkModule = module {
     // Interceptors
     single { HttpLoggingInterceptor() }
     single { CurlInterceptor { curl -> Log.d("Request Curl", curl) } }
-    single { QuoteAuthInterceptor() }
+    single { ZomatoAuthInterceptor() }
 
     // OkHttpClient
     single {
@@ -34,7 +34,7 @@ val networkModule = module {
                 addInterceptor(get<HttpLoggingInterceptor>())
                 addInterceptor(get<CurlInterceptor>())
             }
-            addInterceptor(get<QuoteAuthInterceptor>())
+            addInterceptor(get<ZomatoAuthInterceptor>())
             connectTimeout(30, TimeUnit.SECONDS)
             readTimeout(30, TimeUnit.SECONDS)
             writeTimeout(30, TimeUnit.SECONDS)
@@ -45,12 +45,12 @@ val networkModule = module {
     single {
         Retrofit.Builder()
             .client(get())
-            .baseUrl("http://quotes.rest/qod.json")
+            .baseUrl("https://developers.zomato.com/api/v2.1/")
             .addConverterFactory(get())
             .addCallAdapterFactory(get())
             .build()
     }
 
     // Endpoint
-    single<QuoteApi> { get<Retrofit>().create(QuoteApi::class.java) }
+    single<ZomatoApi> { get<Retrofit>().create(ZomatoApi::class.java) }
 }

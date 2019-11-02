@@ -2,6 +2,7 @@ package base
 
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
+import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.ReplaySubject
 
 abstract class RxInteractor<Command, Mutation, State>(override val initialState: State) :
@@ -11,10 +12,10 @@ abstract class RxInteractor<Command, Mutation, State>(override val initialState:
         val lastState: ReplaySubject<State> = ReplaySubject.createWithSize(1)
 
         return input
+            .observeOn(Schedulers.io())
             .withLatestFrom(lastState,
-                BiFunction<Command, State, Pair<Command, State>> { command, state ->
-                    Pair(command, state)
-                }
+                BiFunction<Command, State, Pair<Command, State>>
+                { command, state -> Pair(command, state) }
             )
             .flatMap { (command, state) -> mutation(command, state) }
             .scan(initialState) { state, mutation -> reduce(mutation, state) }

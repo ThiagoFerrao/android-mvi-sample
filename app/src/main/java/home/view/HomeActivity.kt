@@ -26,7 +26,7 @@ class HomeActivity : RxActivity<HomeCommand, HomeMutation, HomeState, HomeViewMo
 
         bindings.add(
             RxView.clicks(mainButton)
-                .map { HomeCommand.ButtonTap }
+                .map { HomeCommand.ButtonTap(editText.text.toString()) }
                 .subscribe { output.onNext(it) }
         )
 
@@ -34,7 +34,7 @@ class HomeActivity : RxActivity<HomeCommand, HomeMutation, HomeState, HomeViewMo
     }
 
     override fun render(viewModel: HomeViewModel) {
-        quoteTextView.text = viewModel.quoteText
+        quoteTextView.text = viewModel.restaurantName
         mainButton.text = viewModel.buttonText
         mainButton.isEnabled = viewModel.isButtonEnable
     }
