@@ -20,6 +20,7 @@ val homeModule = module {
         scoped<RxInteracting<HomeCommand, HomeMutation, HomeState>> {
             HomeInteractor(
                 get(),
+                get(),
                 get<ButtonTapUseCase>()
             )
         }
