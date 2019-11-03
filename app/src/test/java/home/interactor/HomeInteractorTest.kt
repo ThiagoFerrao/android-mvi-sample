@@ -1,112 +1,90 @@
 package home.interactor
 
+import base.RxUseCase
+import com.nhaarman.mockitokotlin2.verify
+import com.nhaarman.mockitokotlin2.whenever
+import home.di.testHomeInteractorModule
 import home.model.HomeCommand
 import home.model.HomeMutation
 import home.model.HomeState
+import home.util.TestHomeCommand
+import home.util.TestHomeMutation
+import home.util.TestHomeState
+import io.reactivex.Observable
 import io.reactivex.observers.TestObserver
 import io.reactivex.subjects.PublishSubject
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
-import kotlin.test.assertTrue
+import org.koin.core.context.startKoin
+import org.koin.test.AutoCloseKoinTest
+import org.koin.test.inject
 
-class HomeInteractorTest {
+class HomeInteractorTest : AutoCloseKoinTest() {
 
-    private lateinit var interactor: HomeInteractor
+    private val interactor: HomeInteractor by inject()
+    private val buttonTapUseCase: RxUseCase<String, HomeMutation> by inject()
 
     private lateinit var processInput: PublishSubject<HomeCommand>
     private lateinit var processOutput: TestObserver<HomeState>
-    private lateinit var mutationOutput: TestObserver<HomeMutation>
 
     @Before
     fun before() {
-        val initialButtonTitle = "Clique"
-
-        interactor = HomeInteractor(HomeState(initialButtonTitle))
+        startKoin {
+            modules(testHomeInteractorModule)
+        }
         processInput = PublishSubject.create()
-        processOutput = TestObserver.create()
-        mutationOutput = TestObserver.create()
+        processOutput = interactor.process(processInput).test()
     }
 
     @Test
-    fun should_emit_correct_initial_state_before_any_command_was_emitted() {
-        val buttonTitleClick = "Clique"
+    fun should_emit_correct_initial_state_before_any_command_is_emitted() {
+        processOutput.assertValueCount(1)
+        processOutput.assertValue(interactor.initialState)
+    }
 
-        processOutput = interactor.process(processInput).test()
+    @Test
+    fun should_execute_buttonTapUseCase_when_ButtonTap_command_is_emitted() {
+        processInput.onNext(TestHomeCommand.search)
+
+        verify(buttonTapUseCase).execute(TestHomeCommand.search.searchValue)
+    }
+
+    @Test
+    fun should_emit_correct_state_when_mutation_is_emitted() {
+        whenever(buttonTapUseCase.execute(TestHomeCommand.test.searchValue)).thenReturn(
+            Observable.just(TestHomeMutation.data),
+            Observable.just(TestHomeMutation.disableButton),
+            Observable.just(TestHomeMutation.error)
+        )
+
+        processInput.onNext(TestHomeCommand.test)
+        processInput.onNext(TestHomeCommand.test)
+        processInput.onNext(TestHomeCommand.test)
+
+        processOutput.assertValueCount(4)
+        processOutput.assertValues(
+            interactor.initialState,
+            TestHomeState.data,
+            TestHomeState.disableButton,
+            TestHomeState.error
+        )
+    }
+
+    @Test
+    fun should_not_emit_state_when_usecase_dont_emit_besides_initial_state() {
+        whenever(buttonTapUseCase.execute(TestHomeCommand.test.searchValue))
+            .thenReturn(Observable.empty())
+
+        processInput.onNext(TestHomeCommand.test)
 
         processOutput.assertValueCount(1)
-        processOutput.assertValue(HomeState(buttonTitleClick))
-    }
-
-    @Test
-    fun should_emit_correct_state_after_command_was_emitted() {
-        val buttonTitleClick = "Clique"
-        val buttonTitleTap = "Toque"
-
-        processOutput = interactor.process(processInput).test()
-        processInput.onNext(HomeCommand.BUTTON_TAP)
-
-        processOutput.assertValueCount(2)
-        processOutput.assertValues(
-            HomeState(buttonTitleClick),
-            HomeState(buttonTitleTap)
-        )
-    }
-
-    @Test
-    fun should_emit_correct_mutation_after_calling_the_interactor_mutation_function() {
-        val buttonTitleClick = "Clique"
-        val buttonTitleTap = "Toque"
-
-        mutationOutput = interactor
-            .mutation(HomeCommand.BUTTON_TAP, HomeState(buttonTitleClick))
-            .test()
-
-        mutationOutput.assertValueCount(1)
-
-        val value = mutationOutput.values().first()
-        assertTrue { value is HomeMutation.BUTTON_TITLE }
-        assertTrue { (value as HomeMutation.BUTTON_TITLE).title == buttonTitleTap }
-    }
-
-    @Test
-    fun should_emit_correct_mutation_after_calling_the_interactor_mutation_function_with_other_result() {
-        val buttonTitleClick = "Clique"
-        val buttonTitleTap = "Toque"
-
-        mutationOutput = interactor
-            .mutation(HomeCommand.BUTTON_TAP, HomeState(buttonTitleTap))
-            .test()
-
-        mutationOutput.assertValueCount(1)
-
-        val value = mutationOutput.values().first()
-        assertTrue { value is HomeMutation.BUTTON_TITLE }
-        assertTrue { (value as HomeMutation.BUTTON_TITLE).title == buttonTitleClick }
-    }
-
-    @Test
-    fun should_return_correct_state_after_calling_the_interactor_reduce_function() {
-        val buttonTitleClick = "Clique"
-        val buttonTitleTap = "Toque"
-
-        val reducerOutput = interactor.reduce(
-            HomeMutation.BUTTON_TITLE(buttonTitleClick),
-            HomeState(buttonTitleTap)
-        )
-
-        assertTrue { reducerOutput == HomeState(buttonTitleClick) }
+        processOutput.assertValues(interactor.initialState)
     }
 
     @After
     fun after() {
         processInput.onComplete()
         processOutput.dispose()
-        mutationOutput.dispose()
     }
 }
-
-
-//fun process(input: Observable<Command>): Observable<State>
-//fun mutation(command: Command, currentState: State): Observable<Mutation>
-//fun reduce(mutation: Mutation, currentState: State): State

@@ -6,14 +6,14 @@ import home.model.HomeCommand
 import home.model.HomeMutation
 import home.model.HomeState
 import io.reactivex.Observable
-import network.IOSchedulerFactory
+import network.SchedulerProvider
 
 class HomeInteractor(
     override val initialState: HomeState,
-    override val schedulerFactory: IOSchedulerFactory,
+    override val schedulerProvider: SchedulerProvider,
     private val quoteButtonTapUseCase: RxUseCase<String, HomeMutation>
 ) :
-    RxInteractor<HomeCommand, HomeMutation, HomeState>(initialState, schedulerFactory) {
+    RxInteractor<HomeCommand, HomeMutation, HomeState>(initialState, schedulerProvider) {
 
     override fun mutation(command: HomeCommand, currentState: HomeState): Observable<HomeMutation> {
         return when (command) {

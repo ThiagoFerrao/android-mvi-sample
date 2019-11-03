@@ -3,11 +3,11 @@ package base
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
 import io.reactivex.subjects.ReplaySubject
-import network.IOSchedulerFactory
+import network.SchedulerProvider
 
 abstract class RxInteractor<Command, Mutation, State>(
     override val initialState: State,
-    override val schedulerFactory: IOSchedulerFactory
+    override val schedulerProvider: SchedulerProvider
 ) :
     RxInteracting<Command, Mutation, State> {
 
@@ -15,7 +15,7 @@ abstract class RxInteractor<Command, Mutation, State>(
         val lastState: ReplaySubject<State> = ReplaySubject.createWithSize(1)
 
         return input
-            .observeOn(schedulerFactory.scheduler)
+            .observeOn(schedulerProvider.io())
             .withLatestFrom(lastState,
                 BiFunction<Command, State, Pair<Command, State>>
                 { command, state -> Pair(command, state) }

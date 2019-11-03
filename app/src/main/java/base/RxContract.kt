@@ -4,8 +4,7 @@ import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.PublishSubject
-import network.IOSchedulerFactory
-import network.MainSchedulerFactory
+import network.SchedulerProvider
 
 interface RxViewing<Command, Mutation, State, ViewModel> {
     val layoutResource: Int
@@ -16,7 +15,7 @@ interface RxViewing<Command, Mutation, State, ViewModel> {
     val input: Observable<ViewModel>
     val output: PublishSubject<Command>
     val disposer: CompositeDisposable
-    val schedulerFactory: MainSchedulerFactory
+    val schedulerProvider: SchedulerProvider
 
     fun processBinding(): Observable<ViewModel>
     fun createBindings(input: Observable<ViewModel>): ArrayList<Disposable>
@@ -34,7 +33,7 @@ interface RxPresenting<State, ViewModel> {
 
 interface RxInteracting<Command, Mutation, State> {
     val initialState: State
-    val schedulerFactory: IOSchedulerFactory
+    val schedulerProvider: SchedulerProvider
 
     fun process(input: Observable<Command>): Observable<State>
     fun mutation(command: Command, currentState: State): Observable<Mutation>

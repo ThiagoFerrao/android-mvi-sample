@@ -11,7 +11,7 @@ import home.model.HomeViewModel
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.activity_main.*
-import network.MainSchedulerFactory
+import network.SchedulerProvider
 import org.koin.android.ext.android.inject
 import org.koin.android.scope.currentScope
 import thiagocruz.testingthings.R
@@ -23,7 +23,7 @@ class HomeActivity : RxActivity<HomeCommand, HomeMutation, HomeState, HomeViewMo
     override val presenter: RxPresenting<HomeState, HomeViewModel> by currentScope.inject()
     override val interactor: RxInteracting<HomeCommand, HomeMutation, HomeState> by currentScope.inject()
 
-    override val schedulerFactory: MainSchedulerFactory by inject()
+    override val schedulerProvider: SchedulerProvider by inject()
 
     override fun createBindings(input: Observable<HomeViewModel>): ArrayList<Disposable> {
         val bindings = super.createBindings(input)

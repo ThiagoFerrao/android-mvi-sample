@@ -54,7 +54,6 @@ val networkModule = module {
     // Endpoint
     single<ZomatoApi> { get<Retrofit>().create(ZomatoApi::class.java) }
 
-    // Schedulers
-    factory<IOSchedulerFactory> { IOSchedulerFactory.Impl() }
-    factory<MainSchedulerFactory> { MainSchedulerFactory.Impl() }
+    // Scheduler
+    single<SchedulerProvider> { MainSchedulerProvider() }
 }

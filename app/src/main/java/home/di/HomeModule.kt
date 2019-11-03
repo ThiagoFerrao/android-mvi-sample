@@ -15,13 +15,13 @@ import org.koin.dsl.module
 
 val homeModule = module {
     scope(named<HomeActivity>()) {
-        scoped { ButtonTapUseCase(get()) }
+        scoped { ButtonTapUseCase(api = get()) }
         scoped { HomeState(data = null, buttonText = "Search Restaurant", isButtonEnable = true, errorMessage = null) }
         scoped<RxInteracting<HomeCommand, HomeMutation, HomeState>> {
             HomeInteractor(
-                get(),
-                get(),
-                get<ButtonTapUseCase>()
+                initialState = get(),
+                schedulerProvider = get(),
+                quoteButtonTapUseCase = get<ButtonTapUseCase>()
             )
         }
         scoped<RxPresenting<HomeState, HomeViewModel>> { HomePresenter() }

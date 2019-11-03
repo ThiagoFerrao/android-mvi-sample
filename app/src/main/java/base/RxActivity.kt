@@ -29,7 +29,7 @@ abstract class RxActivity<Command, Mutation, State, ViewModel> :
     override fun createBindings(input: Observable<ViewModel>): ArrayList<Disposable> =
         arrayListOf(
             input
-                .observeOn(schedulerFactory.scheduler)
+                .observeOn(schedulerProvider.ui())
                 .subscribe { this.render(it) }
         )
 
