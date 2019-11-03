@@ -4,12 +4,12 @@ import base.RxUseCase
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import home.di.testHomeInteractorModule
+import home.homeutil.TestHomeCommand
+import home.homeutil.TestHomeMutation
+import home.homeutil.TestHomeState
 import home.model.HomeCommand
 import home.model.HomeMutation
 import home.model.HomeState
-import home.util.TestHomeCommand
-import home.util.TestHomeMutation
-import home.util.TestHomeState
 import io.reactivex.Observable
 import io.reactivex.observers.TestObserver
 import io.reactivex.subjects.PublishSubject

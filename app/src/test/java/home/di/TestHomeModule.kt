@@ -2,10 +2,10 @@ package home.di
 
 import base.RxUseCase
 import com.nhaarman.mockitokotlin2.mock
+import home.homeutil.TestHomeState
 import home.interactor.HomeInteractor
 import home.interactor.usecase.ButtonTapUseCase
 import home.model.HomeMutation
-import home.util.TestHomeState
 import network.SchedulerProvider
 import network.TestSchedulerProvider
 import network.ZomatoApi
@@ -37,6 +37,7 @@ val testNetworkModule = module {
             .connectTimeout(2, TimeUnit.SECONDS)
             .readTimeout(2, TimeUnit.SECONDS)
             .writeTimeout(2, TimeUnit.SECONDS)
+            .build()
     }
     single<ZomatoApi> {
         Retrofit.Builder()

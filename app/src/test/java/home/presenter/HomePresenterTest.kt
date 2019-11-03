@@ -1,9 +1,9 @@
 package home.presenter
 
+import home.homeutil.TestHomeState
+import home.homeutil.TestHomeViewModel
 import home.model.HomeState
 import home.model.HomeViewModel
-import home.util.TestHomeState
-import home.util.TestHomeViewModel
 import io.reactivex.observers.TestObserver
 import io.reactivex.subjects.PublishSubject
 import org.junit.After
@@ -25,7 +25,7 @@ class HomePresenterTest {
     }
 
     @Test
-    fun should_not_emit_view_model_if_state_wasnt_emitted() {
+    fun should_not_emit_view_model_if_state_was_not_emitted() {
         output.assertNoValues()
     }
 
