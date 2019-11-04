@@ -1,5 +1,7 @@
 package home.view
 
+import android.os.Bundle
+import androidx.recyclerview.widget.LinearLayoutManager
 import base.RxActivity
 import base.RxInteracting
 import base.RxPresenting
@@ -8,6 +10,7 @@ import home.model.HomeCommand
 import home.model.HomeMutation
 import home.model.HomeState
 import home.model.HomeViewModel
+import home.view.list.HomeAdapter
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.activity_main.*
@@ -26,6 +29,15 @@ class HomeActivity : RxActivity<HomeCommand, HomeMutation, HomeState, HomeViewMo
 
     override val schedulerProvider: SchedulerProvider by inject()
 
+    private val adapter = HomeAdapter()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.adapter = adapter
+    }
+
     override fun createBindings(input: Observable<HomeViewModel>): ArrayList<Disposable> {
         val bindings = super.createBindings(input)
 
@@ -40,6 +52,7 @@ class HomeActivity : RxActivity<HomeCommand, HomeMutation, HomeState, HomeViewMo
 
     override fun render(viewModel: HomeViewModel) {
         recyclerView.show(viewModel.restaurantList.isNotEmpty())
+        adapter.updateData(viewModel.restaurantList)
         errorTextView.show(viewModel.errorMessage.isNullOrBlank().not())
         errorTextView.text = viewModel.errorMessage
         searchButton.isEnabled = viewModel.isButtonEnable
