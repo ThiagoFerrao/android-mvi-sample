@@ -18,7 +18,7 @@ import testutil.mockSuccessResponse
 import testutil.mockTimeoutResponse
 import testutil.startSilently
 
-class ButtonTapUseCaseTest : AutoCloseKoinTest() {
+class SearchUseCaseTest : AutoCloseKoinTest() {
 
     private val buttonTapUseCase: RxUseCase<String, HomeMutation> by inject()
     private val server: MockWebServer by inject()

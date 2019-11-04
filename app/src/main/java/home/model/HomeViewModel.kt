@@ -1,7 +1,9 @@
 package home.model
 
+import network.ZomatoRestaurant
+
 data class HomeViewModel(
-    val restaurantName: String?,
-    val buttonText: String,
-    val isButtonEnable: Boolean
+    val restaurantList: List<ZomatoRestaurant>,
+    val isButtonEnable: Boolean,
+    val errorMessage: String?
 )

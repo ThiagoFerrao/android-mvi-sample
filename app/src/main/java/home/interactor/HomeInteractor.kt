@@ -11,13 +11,13 @@ import network.SchedulerProvider
 class HomeInteractor(
     override val initialState: HomeState,
     override val schedulerProvider: SchedulerProvider,
-    private val quoteButtonTapUseCase: RxUseCase<String, HomeMutation>
+    private val searchUseCase: RxUseCase<String, HomeMutation>
 ) :
     RxInteractor<HomeCommand, HomeMutation, HomeState>(initialState, schedulerProvider) {
 
     override fun mutation(command: HomeCommand, currentState: HomeState): Observable<HomeMutation> {
         return when (command) {
-            is HomeCommand.ButtonTap -> quoteButtonTapUseCase.execute(command.searchValue)
+            is HomeCommand.ButtonTap -> searchUseCase.execute(command.searchValue)
         }
     }
 

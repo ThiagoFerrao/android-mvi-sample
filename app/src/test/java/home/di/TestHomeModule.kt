@@ -4,7 +4,7 @@ import base.RxUseCase
 import com.nhaarman.mockitokotlin2.mock
 import home.homeutil.TestHomeState
 import home.interactor.HomeInteractor
-import home.interactor.usecase.ButtonTapUseCase
+import home.interactor.usecase.SearchUseCase
 import home.model.HomeMutation
 import network.SchedulerProvider
 import network.TestSchedulerProvider
@@ -26,7 +26,7 @@ val testHomeInteractorModule = module {
 }
 
 val testButtonTapUseCaseModule = module {
-    single<RxUseCase<String, HomeMutation>> { ButtonTapUseCase(get()) }
+    single<RxUseCase<String, HomeMutation>> { SearchUseCase(get()) }
 }
 
 val testNetworkModule = module {

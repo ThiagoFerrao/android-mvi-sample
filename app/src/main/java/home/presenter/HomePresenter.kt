@@ -8,9 +8,9 @@ class HomePresenter : RxPresenter<HomeState, HomeViewModel>() {
 
     override fun stateToViewModel(state: HomeState): HomeViewModel {
         return HomeViewModel(
-            restaurantName =  state.errorMessage ?: state.data?.name,
-            buttonText = state.buttonText,
-            isButtonEnable = state.isButtonEnable
+            restaurantList = state.data.orEmpty(),
+            isButtonEnable = state.isButtonEnable,
+            errorMessage = state.errorMessage
         )
     }
 }

@@ -15,6 +15,7 @@ import network.SchedulerProvider
 import org.koin.android.ext.android.inject
 import org.koin.android.scope.currentScope
 import thiagocruz.testingthings.R
+import util.show
 
 class HomeActivity : RxActivity<HomeCommand, HomeMutation, HomeState, HomeViewModel>() {
 
@@ -29,7 +30,7 @@ class HomeActivity : RxActivity<HomeCommand, HomeMutation, HomeState, HomeViewMo
         val bindings = super.createBindings(input)
 
         bindings.add(
-            RxView.clicks(mainButton)
+            RxView.clicks(searchButton)
                 .map { HomeCommand.ButtonTap(editText.text.toString()) }
                 .subscribe { output.onNext(it) }
         )
@@ -38,8 +39,9 @@ class HomeActivity : RxActivity<HomeCommand, HomeMutation, HomeState, HomeViewMo
     }
 
     override fun render(viewModel: HomeViewModel) {
-        quoteTextView.text = viewModel.restaurantName
-        mainButton.text = viewModel.buttonText
-        mainButton.isEnabled = viewModel.isButtonEnable
+        recyclerView.show(viewModel.restaurantList.isNotEmpty())
+        errorTextView.show(viewModel.errorMessage.isNullOrBlank().not())
+        errorTextView.text = viewModel.errorMessage
+        searchButton.isEnabled = viewModel.isButtonEnable
     }
 }

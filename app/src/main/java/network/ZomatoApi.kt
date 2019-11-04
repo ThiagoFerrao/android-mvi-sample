@@ -9,5 +9,5 @@ interface ZomatoApi {
     fun fetchCategories(): Observable<ZomatoCategoriesResponse>
 
     @GET("search")
-    fun fetchRestaurants(@Query("q") searchValue: String, @Query("count") count: Int = 1): Observable<ZomatoRestaurantsResponse>
+    fun fetchRestaurants(@Query("q") searchValue: String): Observable<ZomatoRestaurantsResponse>
 }

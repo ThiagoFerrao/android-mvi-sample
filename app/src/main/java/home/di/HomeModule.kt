@@ -3,7 +3,7 @@ package home.di
 import base.RxInteracting
 import base.RxPresenting
 import home.interactor.HomeInteractor
-import home.interactor.usecase.ButtonTapUseCase
+import home.interactor.usecase.SearchUseCase
 import home.model.HomeCommand
 import home.model.HomeMutation
 import home.model.HomeState
@@ -15,13 +15,13 @@ import org.koin.dsl.module
 
 val homeModule = module {
     scope(named<HomeActivity>()) {
-        scoped { ButtonTapUseCase(api = get()) }
-        scoped { HomeState(data = null, buttonText = "Search Restaurant", isButtonEnable = true, errorMessage = null) }
+        scoped { SearchUseCase(api = get()) }
+        scoped { HomeState(data = null, isButtonEnable = true, errorMessage = null) }
         scoped<RxInteracting<HomeCommand, HomeMutation, HomeState>> {
             HomeInteractor(
                 initialState = get(),
                 schedulerProvider = get(),
-                quoteButtonTapUseCase = get<ButtonTapUseCase>()
+                searchUseCase = get<SearchUseCase>()
             )
         }
         scoped<RxPresenting<HomeState, HomeViewModel>> { HomePresenter() }

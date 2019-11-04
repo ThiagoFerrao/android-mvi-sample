@@ -1,5 +1,7 @@
 package util
 
+import android.view.View
+
 val Throwable.treatMessage: String
     get() {
         if (this is retrofit2.HttpException) {
@@ -12,3 +14,7 @@ val Throwable.treatMessage: String
         }
         return this.localizedMessage ?: "An error occurred"
     }
+
+fun View.show(show: Boolean) {
+    this.visibility = if (show) View.VISIBLE else View.INVISIBLE
+}
