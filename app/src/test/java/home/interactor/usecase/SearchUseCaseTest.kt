@@ -1,6 +1,6 @@
 package home.interactor.usecase
 
-import base.RxUseCase
+import rxbase.RxUseCase
 import home.di.testButtonTapUseCaseModule
 import home.di.testNetworkModule
 import home.homeutil.TestHomeMutation

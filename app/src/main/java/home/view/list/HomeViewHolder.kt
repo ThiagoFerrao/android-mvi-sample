@@ -1,13 +1,21 @@
 package home.view.list
 
 import android.view.View
-import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.home_view_holder.view.*
+import home.model.HomeCommand
+import io.reactivex.Observable
+import kotlinx.android.synthetic.main.home_view_holder.*
 import network.ZomatoRestaurant
+import rxbase.RxViewHolder
 
-class HomeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+class HomeViewHolder(
+    override val containerView: View
+) : RxViewHolder<HomeCommand, ZomatoRestaurant>(containerView) {
 
-    fun bind(data: ZomatoRestaurant) {
-        itemView.itemName.text = data.name
+    override fun bind(data: ZomatoRestaurant) {
+        super.bind(data)
+
+        itemName.text = data.name
     }
+
+    override fun createOutput(): Observable<HomeCommand> = Observable.empty()
 }

@@ -1,7 +1,8 @@
 package home.di
 
-import base.RxInteracting
-import base.RxPresenting
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import home.interactor.HomeInteractor
 import home.interactor.usecase.SearchUseCase
 import home.model.HomeCommand
@@ -10,13 +11,35 @@ import home.model.HomeState
 import home.model.HomeViewModel
 import home.presenter.HomePresenter
 import home.view.HomeActivity
+import home.view.list.HomeAdapter
+import home.view.list.HomeDiffUtil
+import io.reactivex.Observer
+import network.ZomatoRestaurant
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
+import rxbase.RxInteracting
+import rxbase.RxListAdapter
+import rxbase.RxPresenting
+import rxbase.RxViewHolder
 
 val homeModule = module {
     scope(named<HomeActivity>()) {
-        scoped { SearchUseCase(api = get()) }
-        scoped { HomeState(data = null, isButtonEnable = true, errorMessage = null) }
+
+        // Interactor Injection
+        scoped {
+            HomeState(
+                data = null,
+                isButtonEnable = true,
+                errorMessage = null
+            )
+        }
+
+        scoped {
+            SearchUseCase(
+                api = get()
+            )
+        }
+
         scoped<RxInteracting<HomeCommand, HomeMutation, HomeState>> {
             HomeInteractor(
                 initialState = get(),
@@ -24,6 +47,30 @@ val homeModule = module {
                 searchUseCase = get<SearchUseCase>()
             )
         }
-        scoped<RxPresenting<HomeState, HomeViewModel>> { HomePresenter() }
+
+        // Presenter Injection
+        scoped<RxPresenting<HomeState, HomeViewModel>> {
+            HomePresenter()
+        }
+
+        // RecyclerView Injection
+        scoped<RecyclerView.LayoutManager> {
+            StaggeredGridLayoutManager(
+                2,
+                StaggeredGridLayoutManager.VERTICAL
+            )
+        }
+
+        scoped<DiffUtil.ItemCallback<ZomatoRestaurant>>{
+            HomeDiffUtil()
+        }
+        
+        scoped<RxListAdapter<HomeCommand, ZomatoRestaurant, RxViewHolder<HomeCommand, ZomatoRestaurant>>>
+        { (output: Observer<HomeCommand>) ->
+            HomeAdapter(
+                diffUtil = get(),
+                viewOutput = output
+            )
+        }
     }
 }

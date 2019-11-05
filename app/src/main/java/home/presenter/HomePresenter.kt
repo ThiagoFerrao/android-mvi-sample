@@ -1,8 +1,8 @@
 package home.presenter
 
-import base.RxPresenter
 import home.model.HomeState
 import home.model.HomeViewModel
+import rxbase.RxPresenter
 
 class HomePresenter : RxPresenter<HomeState, HomeViewModel>() {
 

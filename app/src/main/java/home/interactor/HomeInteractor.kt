@@ -1,12 +1,12 @@
 package home.interactor
 
-import base.RxInteractor
-import base.RxUseCase
 import home.model.HomeCommand
 import home.model.HomeMutation
 import home.model.HomeState
 import io.reactivex.Observable
 import network.SchedulerProvider
+import rxbase.RxInteractor
+import rxbase.RxUseCase
 
 class HomeInteractor(
     override val initialState: HomeState,
