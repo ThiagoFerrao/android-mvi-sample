@@ -1,19 +1,18 @@
 package home.interactor
 
+import home.di.HomeInteractorType
+import home.di.SearchUseCaseType
 import home.model.HomeCommand
 import home.model.HomeMutation
 import home.model.HomeState
 import io.reactivex.Observable
 import network.SchedulerProvider
-import rxbase.RxInteractor
-import rxbase.RxUseCase
 
 class HomeInteractor(
     override val initialState: HomeState,
     override val schedulerProvider: SchedulerProvider,
-    private val searchUseCase: RxUseCase<String, HomeMutation>
-) :
-    RxInteractor<HomeCommand, HomeMutation, HomeState>(initialState, schedulerProvider) {
+    private val searchUseCase: SearchUseCaseType
+) : HomeInteractorType(initialState, schedulerProvider) {
 
     override fun mutation(command: HomeCommand, currentState: HomeState): Observable<HomeMutation> {
         return when (command) {

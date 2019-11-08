@@ -1,12 +1,12 @@
 package home.interactor.usecase
 
+import home.di.SearchUseCaseType
 import home.model.HomeMutation
 import io.reactivex.Observable
 import network.ZomatoApi
-import rxbase.RxUseCase
 import util.treatMessage
 
-class SearchUseCase(private val api: ZomatoApi) : RxUseCase<String, HomeMutation>() {
+class SearchUseCase(private val api: ZomatoApi) : SearchUseCaseType() {
 
     override fun execute(parameters: String): Observable<HomeMutation> =
         api.fetchRestaurants(parameters)

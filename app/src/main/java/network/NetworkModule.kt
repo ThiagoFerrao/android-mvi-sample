@@ -35,14 +35,14 @@ val networkModule = module {
                 addInterceptor(get<CurlInterceptor>())
             }
             addInterceptor(get<ZomatoAuthInterceptor>())
-            connectTimeout(30, TimeUnit.SECONDS)
-            readTimeout(30, TimeUnit.SECONDS)
-            writeTimeout(30, TimeUnit.SECONDS)
+            connectTimeout(10, TimeUnit.SECONDS)
+            readTimeout(10, TimeUnit.SECONDS)
+            writeTimeout(10, TimeUnit.SECONDS)
         }.build()
     }
 
     // Retrofit
-    single {
+    single<Retrofit> {
         Retrofit.Builder()
             .client(get())
             .baseUrl("https://developers.zomato.com/api/v2.1/")

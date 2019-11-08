@@ -1,10 +1,10 @@
 package home.presenter
 
+import home.di.HomePresenterType
 import home.model.HomeState
 import home.model.HomeViewModel
-import rxbase.RxPresenter
 
-class HomePresenter : RxPresenter<HomeState, HomeViewModel>() {
+class HomePresenter : HomePresenterType() {
 
     override fun stateToViewModel(state: HomeState): HomeViewModel {
         return HomeViewModel(

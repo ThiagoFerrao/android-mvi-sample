@@ -13,14 +13,20 @@ import home.presenter.HomePresenter
 import home.view.HomeActivity
 import home.view.list.HomeAdapter
 import home.view.list.HomeDiffUtil
+import io.reactivex.Observable
 import io.reactivex.Observer
 import network.ZomatoRestaurant
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
-import rxbase.RxInteracting
-import rxbase.RxListAdapter
-import rxbase.RxPresenting
-import rxbase.RxViewHolder
+import rxbase.*
+
+typealias SearchUseCaseType =  RxUseCase<String, HomeMutation>
+typealias HomeInteractorType = RxInteractor<HomeCommand, HomeMutation, HomeState>
+typealias HomePresenterType = RxPresenter<HomeState, HomeViewModel>
+typealias HomeAdapterType = RxListAdapter<HomeCommand, ZomatoRestaurant, HomeViewHolderType>
+typealias HomeViewHolderType = RxViewHolder<HomeCommand, ZomatoRestaurant>
+typealias HomeDiffUtilType = DiffUtil.ItemCallback<ZomatoRestaurant>
+typealias HomeActivityType = RxActivity<HomeCommand, HomeMutation, HomeState, HomeViewModel>
 
 val homeModule = module {
     scope(named<HomeActivity>()) {
@@ -34,43 +40,44 @@ val homeModule = module {
             )
         }
 
-        scoped {
+        scoped<SearchUseCaseType> {
             SearchUseCase(
                 api = get()
             )
         }
 
-        scoped<RxInteracting<HomeCommand, HomeMutation, HomeState>> {
+        scoped<HomeInteractorType> {
             HomeInteractor(
                 initialState = get(),
                 schedulerProvider = get(),
-                searchUseCase = get<SearchUseCase>()
+                searchUseCase = get()
             )
         }
 
         // Presenter Injection
-        scoped<RxPresenting<HomeState, HomeViewModel>> {
+        scoped<HomePresenterType> {
             HomePresenter()
         }
 
         // RecyclerView Injection
         scoped<RecyclerView.LayoutManager> {
-            StaggeredGridLayoutManager(
-                2,
-                StaggeredGridLayoutManager.VERTICAL
-            )
+            StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
         }
 
-        scoped<DiffUtil.ItemCallback<ZomatoRestaurant>>{
+        scoped<HomeDiffUtilType> {
             HomeDiffUtil()
         }
         
-        scoped<RxListAdapter<HomeCommand, ZomatoRestaurant, RxViewHolder<HomeCommand, ZomatoRestaurant>>>
-        { (output: Observer<HomeCommand>) ->
+        scoped<HomeAdapterType> { (output: Observer<HomeCommand>) ->
             HomeAdapter(
                 diffUtil = get(),
                 viewOutput = output
             )
+        }
+
+        // View Input Process Injection
+        scoped { (output: Observable<HomeCommand>) ->
+            get<HomePresenterType>().adapt(get<HomeInteractorType>().process(output))
         }
     }
 }

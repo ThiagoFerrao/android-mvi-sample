@@ -1,9 +1,9 @@
 package home.view.list
 
-import androidx.recyclerview.widget.DiffUtil
+import home.di.HomeDiffUtilType
 import network.ZomatoRestaurant
 
-class HomeDiffUtil : DiffUtil.ItemCallback<ZomatoRestaurant>() {
+class HomeDiffUtil : HomeDiffUtilType() {
 
     override fun areItemsTheSame(oldItem: ZomatoRestaurant, newItem: ZomatoRestaurant): Boolean =
         oldItem.id == newItem.id
