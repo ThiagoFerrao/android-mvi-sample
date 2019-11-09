@@ -26,6 +26,11 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
+    defaultConfig {
+        buildConfigField "String", "ZOMATO_BASE_URL", ZomatoBaseUrl
+        buildConfigField "String", "ZOMATO_USER_KEY", ZomatoUserKey
+    }
 }
 
 androidExtensions {

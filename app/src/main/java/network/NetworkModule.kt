@@ -45,7 +45,7 @@ val networkModule = module {
     single<Retrofit> {
         Retrofit.Builder()
             .client(get())
-            .baseUrl("https://developers.zomato.com/api/v2.1/")
+            .baseUrl(BuildConfig.ZOMATO_BASE_URL)
             .addConverterFactory(get())
             .addCallAdapterFactory(get())
             .build()
