@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="thiagocruz.testingthings">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:name="app.application.BaseApplication"
@@ -25,7 +25,9 @@
             </intent-filter>
 
         </activity>
-        <activity android:name="home.view.HomeActivity" />
+        <activity
+            android:name="home.view.HomeActivity"
+            android:windowSoftInputMode="adjustResize" />
 
     </application>
 

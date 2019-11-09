@@ -1,8 +1,11 @@
 package home.view
 
+import android.content.res.ColorStateList
 import android.os.Bundle
+import android.view.inputmethod.EditorInfo
 import androidx.recyclerview.widget.RecyclerView
 import com.jakewharton.rxbinding2.view.RxView
+import com.jakewharton.rxbinding2.widget.RxTextView
 import home.di.HomeActivityType
 import home.di.HomeAdapterType
 import home.di.HomeInteractorType
@@ -41,11 +44,16 @@ class HomeActivity : HomeActivityType() {
     override fun createBindings(input: Observable<HomeViewModel>): ArrayList<Disposable> {
         val bindings = super.createBindings(input)
 
-        bindings.add(
+        bindings.addAll(listOf(
             RxView.clicks(searchButton)
                 .map { HomeCommand.ButtonTap(editText.text.toString()) }
+                .subscribe { output.onNext(it) },
+
+            RxTextView.editorActions(editText)
+                .filter { it == EditorInfo.IME_ACTION_DONE }
+                .map { HomeCommand.ButtonTap(editText.text.toString()) }
                 .subscribe { output.onNext(it) }
-        )
+        ))
 
         return bindings
     }
@@ -58,5 +66,9 @@ class HomeActivity : HomeActivityType() {
         errorTextView.text = viewModel.errorMessage
 
         searchButton.isEnabled = viewModel.isButtonEnable
+
+        val enableColor = ColorStateList.valueOf(getColor(R.color.colorAccent))
+        val disableColor = ColorStateList.valueOf(getColor(R.color.colorDisable))
+        searchButton.backgroundTintList = if (viewModel.isButtonEnable) enableColor else disableColor
     }
 }

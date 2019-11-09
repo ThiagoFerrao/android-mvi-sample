@@ -72,7 +72,8 @@
         android:tint="@android:color/black"
         app:backgroundTint="@color/colorAccent"
         app:layout_constraintBottom_toBottomOf="@id/guidelineBottom"
-        app:layout_constraintEnd_toEndOf="@id/guidelineEnd" />
+        app:layout_constraintEnd_toEndOf="@id/guidelineEnd"
+        app:layout_constraintStart_toEndOf="@id/editText" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guidelineStart"
