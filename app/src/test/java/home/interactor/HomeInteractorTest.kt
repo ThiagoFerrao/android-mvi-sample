@@ -1,6 +1,6 @@
 package home.interactor
 
-import rxbase.RxUseCase
+import base.RxUseCase
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import home.di.testHomeInteractorModule

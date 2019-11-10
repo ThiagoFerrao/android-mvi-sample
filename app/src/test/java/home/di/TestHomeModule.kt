@@ -1,6 +1,6 @@
 package home.di
 
-import rxbase.RxUseCase
+import base.RxUseCase
 import com.nhaarman.mockitokotlin2.mock
 import home.homeutil.TestHomeState
 import home.interactor.HomeInteractor

@@ -3,29 +3,26 @@ package home.di
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import base.*
 import home.interactor.HomeInteractor
 import home.interactor.usecase.SearchUseCase
-import home.model.HomeCommand
-import home.model.HomeMutation
-import home.model.HomeState
-import home.model.HomeViewModel
+import home.model.*
 import home.presenter.HomePresenter
 import home.view.HomeActivity
 import home.view.list.HomeAdapter
 import home.view.list.HomeDiffUtil
 import io.reactivex.Observable
 import io.reactivex.Observer
-import network.ZomatoRestaurant
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
-import rxbase.*
+import util.CustomGridItemDecoration
 
 typealias SearchUseCaseType =  RxUseCase<String, HomeMutation>
 typealias HomeInteractorType = RxInteractor<HomeCommand, HomeMutation, HomeState>
 typealias HomePresenterType = RxPresenter<HomeState, HomeViewModel>
-typealias HomeAdapterType = RxListAdapter<HomeCommand, ZomatoRestaurant, HomeViewHolderType>
-typealias HomeViewHolderType = RxViewHolder<HomeCommand, ZomatoRestaurant>
-typealias HomeDiffUtilType = DiffUtil.ItemCallback<ZomatoRestaurant>
+typealias HomeAdapterType = RxListAdapter<HomeCommand, RestaurantViewModel, HomeViewHolderType>
+typealias HomeViewHolderType = BaseViewHolder<HomeCommand, RestaurantViewModel>
+typealias HomeDiffUtilType = DiffUtil.ItemCallback<RestaurantViewModel>
 typealias HomeActivityType = RxActivity<HomeCommand, HomeMutation, HomeState, HomeViewModel>
 
 val homeModule = module {
@@ -72,6 +69,13 @@ val homeModule = module {
             HomeAdapter(
                 diffUtil = get(),
                 viewOutput = output
+            )
+        }
+
+        scoped<RecyclerView.ItemDecoration> {
+            CustomGridItemDecoration(
+                spanCount = 2,
+                itemSpace = 20
             )
         }
 

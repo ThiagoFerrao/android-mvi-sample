@@ -1,13 +1,13 @@
 package home.view.list
 
 import home.di.HomeDiffUtilType
-import network.ZomatoRestaurant
+import home.model.RestaurantViewModel
 
 class HomeDiffUtil : HomeDiffUtilType() {
 
-    override fun areItemsTheSame(oldItem: ZomatoRestaurant, newItem: ZomatoRestaurant): Boolean =
+    override fun areItemsTheSame(oldItem: RestaurantViewModel, newItem: RestaurantViewModel): Boolean =
         oldItem.id == newItem.id
 
-    override fun areContentsTheSame(oldItem: ZomatoRestaurant, newItem: ZomatoRestaurant): Boolean =
+    override fun areContentsTheSame(oldItem: RestaurantViewModel, newItem: RestaurantViewModel): Boolean =
         oldItem == newItem
 }

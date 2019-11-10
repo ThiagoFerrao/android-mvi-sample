@@ -1,4 +1,4 @@
-package rxbase
+package base
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -7,7 +7,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.PublishSubject
 import network.SchedulerProvider
-import rxbase.RxViewing.Companion.NO_LAYOUT
+import base.RxViewing.Companion.NO_LAYOUT
 
 interface RxViewing<Command, Mutation, State, ViewModel> {
     val layoutResource: Int

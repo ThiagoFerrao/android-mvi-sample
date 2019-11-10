@@ -20,7 +20,9 @@ import org.koin.android.ext.android.inject
 import org.koin.android.scope.currentScope
 import org.koin.core.parameter.parametersOf
 import thiagocruz.testingthings.R
+import util.clearFocusAndHideKeyboard
 import util.show
+import util.showWithText
 
 class HomeActivity : HomeActivityType() {
     override val layoutResource = R.layout.activity_main
@@ -33,12 +35,16 @@ class HomeActivity : HomeActivityType() {
 
     private val layoutManager: RecyclerView.LayoutManager by currentScope.inject()
     private val adapter: HomeAdapterType by currentScope.inject { parametersOf(output) }
+    private val itemDecoration: RecyclerView.ItemDecoration by currentScope.inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        recyclerView.layoutManager = layoutManager
-        recyclerView.adapter = adapter
+        recyclerView.also {
+            it.layoutManager = layoutManager
+            it.adapter = adapter
+            it.addItemDecoration(itemDecoration)
+        }
     }
 
     override fun createBindings(input: Observable<HomeViewModel>): ArrayList<Disposable> {
@@ -47,11 +53,13 @@ class HomeActivity : HomeActivityType() {
         bindings.addAll(listOf(
             RxView.clicks(searchButton)
                 .map { HomeCommand.ButtonTap(editText.text.toString()) }
+                .doOnNext { editText.clearFocusAndHideKeyboard() }
                 .subscribe { output.onNext(it) },
 
             RxTextView.editorActions(editText)
                 .filter { it == EditorInfo.IME_ACTION_DONE }
                 .map { HomeCommand.ButtonTap(editText.text.toString()) }
+                .doOnNext { editText.clearFocusAndHideKeyboard() }
                 .subscribe { output.onNext(it) }
         ))
 
@@ -62,13 +70,11 @@ class HomeActivity : HomeActivityType() {
         recyclerView.show(viewModel.restaurantList.isNotEmpty())
         adapter.updateData(viewModel.restaurantList)
 
-        errorTextView.show(viewModel.errorMessage.isNullOrBlank().not())
-        errorTextView.text = viewModel.errorMessage
-
-        searchButton.isEnabled = viewModel.isButtonEnable
+        errorTextView.showWithText(viewModel.errorMessage)
 
         val enableColor = ColorStateList.valueOf(getColor(R.color.colorAccent))
         val disableColor = ColorStateList.valueOf(getColor(R.color.colorDisable))
         searchButton.backgroundTintList = if (viewModel.isButtonEnable) enableColor else disableColor
+        searchButton.isEnabled = viewModel.isButtonEnable
     }
 }

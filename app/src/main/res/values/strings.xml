@@ -3,4 +3,6 @@
     <string name="action_settings">Settings</string>
     <string name="toolbar_title">Restaurants by Name</string>
     <string name="text_hint">Search Restaurant</string>
+    <string name="item_more_button">Show More</string>
+    <string name="item_less_button">Show Less</string>
 </resources>

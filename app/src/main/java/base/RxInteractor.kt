@@ -1,4 +1,4 @@
-package rxbase
+package base
 
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction

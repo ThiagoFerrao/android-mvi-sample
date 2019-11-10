@@ -1,4 +1,4 @@
-package rxbase
+package base
 
 import io.reactivex.Observable
 
@@ -8,4 +8,5 @@ interface RxUseCasing<Parameters, Mutation> {
 
 abstract class RxUseCase<Parameters, Mutation> : RxUseCasing<Parameters, Mutation>
 
-fun <Mutation> RxUseCase<Unit, Mutation>.execute() = execute(parameters = Unit)
+fun <Mutation> RxUseCase<Unit, Mutation>.execute() =
+    execute(Unit)

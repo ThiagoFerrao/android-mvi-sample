@@ -16,7 +16,10 @@ class HomeInteractor(
 
     override fun mutation(command: HomeCommand, currentState: HomeState): Observable<HomeMutation> {
         return when (command) {
+
             is HomeCommand.ButtonTap -> searchUseCase.execute(command.searchValue)
+
+            is HomeCommand.ItemButtonTap -> Observable.just(HomeMutation.UpdateShowInfo(command.itemId))
         }
     }
 
@@ -25,11 +28,20 @@ class HomeInteractor(
         newState.isButtonEnable = true
 
         when (mutation) {
-            is HomeMutation.DisableButton -> newState.isButtonEnable = false
+
             is HomeMutation.UpdateData -> {
                 newState.data = mutation.data
                 newState.errorMessage = null
             }
+
+            is HomeMutation.UpdateShowInfo -> {
+                newState.data?.map {
+                    if (it.id == mutation.restaurantId) it.showInfo = !it.showInfo
+                }
+            }
+
+            is HomeMutation.DisableButton -> newState.isButtonEnable = false
+
             is HomeMutation.Error -> {
                 newState.data = null
                 newState.errorMessage = mutation.message

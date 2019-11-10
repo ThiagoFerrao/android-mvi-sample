@@ -18,4 +18,11 @@ class HomeAdapter(
         val inflater = LayoutInflater.from(parent.context)
         return HomeViewHolder(inflater.inflate(R.layout.home_view_holder, parent, false))
     }
+
+    override fun onBindViewHolder(holder: HomeViewHolderType, position: Int) {
+        super.onBindViewHolder(holder, position)
+
+        val restaurantId = getItem(position).id
+        (holder as? HomeViewHolder)?.bindOutputTo(viewOutput, restaurantId)
+    }
 }
