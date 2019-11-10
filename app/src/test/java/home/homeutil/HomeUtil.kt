@@ -1,9 +1,6 @@
 package home.homeutil
 
-import home.model.HomeCommand
-import home.model.HomeMutation
-import home.model.HomeState
-import home.model.HomeViewModel
+import home.model.*
 import network.ZomatoLocation
 import network.ZomatoRestaurant
 
@@ -23,16 +20,21 @@ object TestHomeState {
         true,
         testErrorMessage
     )
+    val infoChange = HomeState(
+        restaurantInfoList,
+        true,
+        null
+    )
 }
 
 object TestHomeViewModel {
     val withData = HomeViewModel(
-        restaurantList,
+        restaurantViewModelList,
         true,
         null
     )
     val withDisableButton = HomeViewModel(
-        restaurantList,
+        restaurantViewModelList,
         false,
         null
     )
@@ -44,7 +46,8 @@ object TestHomeViewModel {
 }
 
 object TestHomeCommand {
-    val test = HomeCommand.ButtonTap("test")
+    val buttonTap = HomeCommand.ButtonTap("test")
+    val itemButtonTap = HomeCommand.ItemButtonTap("6713153")
     val search = HomeCommand.ButtonTap("search")
 }
 
@@ -52,17 +55,57 @@ object TestHomeMutation {
     val data = HomeMutation.UpdateData(restaurantList)
     val error = HomeMutation.Error(testErrorMessage)
     val disableButton = HomeMutation.DisableButton
+    val updateInfo = HomeMutation.UpdateShowInfo("6713153")
 }
 
 private const val testErrorMessage = "Unable to use the parameters defined in the request"
 
-private val restaurantList = listOf<ZomatoRestaurant>(
+private val restaurantList = listOf(
     ZomatoRestaurant(
         "6713153",
         "Porto Brazil",
         ZomatoLocation("Rua Doutor Álvaro Alvim, 210, Vila Mariana, São Paulo"),
         "Brazilian, Bar Food",
-        "11:00 to 24:00 (Mon-Sat),Closed (Sun)"
+        "11:00 to 24:00 (Mon-Sat),Closed (Sun)",
+        false
+    ),
+    ZomatoRestaurant(
+        "6714814",
+        "Batata Brazil",
+        ZomatoLocation("Osasco Plaza Shopping - Térreo, Rua Tenente Avelar Pires de Azevedo, 81, Centro, Osasco"),
+        "American, Fast Food",
+        "10:00 to 22:00 (Mon-Sat),11:00 to 22:00 (Sun)",
+        false
+    )
+)
+
+private val restaurantViewModelList = listOf(
+    RestaurantViewModel(
+        "6713153",
+        "Porto Brazil",
+        "Brazilian, Bar Food",
+        "11:00 to 24:00 (Mon-Sat),Closed (Sun)",
+        "Rua Doutor Álvaro Alvim, 210, Vila Mariana, São Paulo",
+        false
+    ),
+    RestaurantViewModel(
+        "6714814",
+        "Batata Brazil",
+        "American, Fast Food",
+        "10:00 to 22:00 (Mon-Sat),11:00 to 22:00 (Sun)",
+        "Osasco Plaza Shopping - Térreo, Rua Tenente Avelar Pires de Azevedo, 81, Centro, Osasco",
+        false
+    )
+)
+
+private val restaurantInfoList = listOf(
+    ZomatoRestaurant(
+        "6713153",
+        "Porto Brazil",
+        ZomatoLocation("Rua Doutor Álvaro Alvim, 210, Vila Mariana, São Paulo"),
+        "Brazilian, Bar Food",
+        "11:00 to 24:00 (Mon-Sat),Closed (Sun)",
+        true
     ),
     ZomatoRestaurant(
         "6714814",
@@ -70,19 +113,5 @@ private val restaurantList = listOf<ZomatoRestaurant>(
         ZomatoLocation("Osasco Plaza Shopping - Térreo, Rua Tenente Avelar Pires de Azevedo, 81, Centro, Osasco"),
         "American, Fast Food",
         "10:00 to 22:00 (Mon-Sat),11:00 to 22:00 (Sun)"
-    ),
-    ZomatoRestaurant(
-        "6703023",
-        "Porto Brazil Hamburgueria",
-        ZomatoLocation("Rua Doutor Alvaro Alvim, 210, Vila Mariana, São Paulo"),
-        "American",
-        "11:00 to 24:00 (Mon-Sat),Closed (Sun)"
-    ),
-    ZomatoRestaurant(
-        "6706290",
-        "Garage Sale Brazil",
-        ZomatoLocation("Alameda Barão de Limeira, 71, República, São Paulo"),
-        "Cafe",
-        "09:00 to 17:00 (Mon-Fri),09:00 to 16:00 (Sat),Closed (Sun)"
     )
 )

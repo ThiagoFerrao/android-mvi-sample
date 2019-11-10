@@ -44,8 +44,7 @@ data class ZomatoRestaurant(
     val cuisines: String,
     @SerializedName("timings")
     val timings: String,
-
-    var showInfo: Boolean = false
+    val showInfo: Boolean = false
 )
 
 data class ZomatoLocation(

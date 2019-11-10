@@ -35,9 +35,11 @@ class HomeInteractor(
             }
 
             is HomeMutation.UpdateShowInfo -> {
-                newState.data?.map {
-                    if (it.id == mutation.restaurantId) it.showInfo = !it.showInfo
+                val newData = newState.data?.map {
+                    if (it.id == mutation.restaurantId) it.copy(showInfo = !it.showInfo)
+                    else it
                 }
+                newState.data = newData
             }
 
             is HomeMutation.DisableButton -> newState.isButtonEnable = false

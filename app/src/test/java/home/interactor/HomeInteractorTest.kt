@@ -19,6 +19,7 @@ import org.junit.Test
 import org.koin.core.context.startKoin
 import org.koin.test.AutoCloseKoinTest
 import org.koin.test.inject
+import kotlin.test.assertTrue
 
 class HomeInteractorTest : AutoCloseKoinTest() {
 
@@ -52,15 +53,15 @@ class HomeInteractorTest : AutoCloseKoinTest() {
 
     @Test
     fun should_emit_correct_state_when_mutation_is_emitted() {
-        whenever(buttonTapUseCase.execute(TestHomeCommand.test.searchValue)).thenReturn(
+        whenever(buttonTapUseCase.execute(TestHomeCommand.buttonTap.searchValue)).thenReturn(
             Observable.just(TestHomeMutation.data),
             Observable.just(TestHomeMutation.disableButton),
             Observable.just(TestHomeMutation.error)
         )
 
-        processInput.onNext(TestHomeCommand.test)
-        processInput.onNext(TestHomeCommand.test)
-        processInput.onNext(TestHomeCommand.test)
+        processInput.onNext(TestHomeCommand.buttonTap)
+        processInput.onNext(TestHomeCommand.buttonTap)
+        processInput.onNext(TestHomeCommand.buttonTap)
 
         processOutput.assertValueCount(4)
         processOutput.assertValues(
@@ -73,13 +74,32 @@ class HomeInteractorTest : AutoCloseKoinTest() {
 
     @Test
     fun should_not_emit_state_when_usecase_dont_emit_besides_initial_state() {
-        whenever(buttonTapUseCase.execute(TestHomeCommand.test.searchValue))
+        whenever(buttonTapUseCase.execute(TestHomeCommand.buttonTap.searchValue))
             .thenReturn(Observable.empty())
 
-        processInput.onNext(TestHomeCommand.test)
+        processInput.onNext(TestHomeCommand.buttonTap)
 
         processOutput.assertValueCount(1)
         processOutput.assertValues(interactor.initialState)
+    }
+
+    @Test
+    fun should_emit_info_mutation_when_item_button_command_is_emitted() {
+        val testCommand = TestHomeCommand.itemButtonTap
+        val testState = TestHomeState.data
+        val testMutation = interactor.mutation(testCommand, testState).test()
+
+        testMutation.assertValueCount(1)
+        testMutation.assertValue(TestHomeMutation.updateInfo)
+    }
+
+    @Test
+    fun should_emit_correct_state_when_item_button_command_is_emitted() {
+        val testMutation = TestHomeMutation.updateInfo
+        val testState = TestHomeState.data
+        val testNewState = interactor.reduce(testMutation, testState)
+
+        assertTrue { testNewState.equals(TestHomeState.infoChange) }
     }
 
     @After
